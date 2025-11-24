@@ -1,0 +1,25 @@
+edge(a,b).
+edge(a,c).
+edge(b,d).
+edge(c,d).
+edge(d,e).
+
+bfs(S,G,Path) :-
+    bfs_q([[S]], G, R),
+    reverse(R, Path).
+
+bfs_q([[G|Rest]|_], G, [G|Rest]).
+bfs_q([[N|Rest]|Others], G, Sol) :-
+    findall([X,N|Rest],
+            (edge(N,X), \+ member(X,[N|Rest])),
+            NewPaths),
+    append(Others, NewPaths, Queue),
+    bfs_q(Queue, G, Sol).
+
+main :-
+    write('Enter start node: '), read(S),
+    write('Enter goal node: '),  read(G),
+    bfs(S,G,Path),
+    write('BFS Path = '), write(Path), nl.
+
+:- initialization(main).
