@@ -1,9 +1,23 @@
-main :-
-    write('Enter N: '), read(N),
-    queens(N, Q), write(Q), nl.
+
+range(N, L) :- range(1, N, L).
+
+range(I, N, []) :- I > N.
+range(I, N, [I|R]) :-
+    I =< N,
+    I1 is I + 1,
+    range(I1, N, R).
+
+perm([], []).
+perm([H|T], P) :-
+    perm(T, PT),
+    insert(H, PT, P).
+
+insert(X, L, [X|L]).
+insert(X, [H|T], [H|R]) :-
+    insert(X, T, R).
 
 queens(N, Q) :-
-    numlist(1, N, L),
+    range(N, L),
     perm(L, Q),
     safe(Q).
 
@@ -18,5 +32,10 @@ no_attack(X, [Y|T], D) :-
     X =\= Y - D,
     D1 is D + 1,
     no_attack(X, T, D1).
+
+main :-
+    write('Enter N: '), read(N),
+    queens(N, Q),
+    write('One solution: '), write(Q), nl.
 
 :- initialization(main).
