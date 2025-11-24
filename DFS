@@ -1,0 +1,23 @@
+edge(a,b).
+edge(a,c).
+edge(b,d).
+edge(c,d).
+edge(d,e).
+
+dfs(S,G,Path) :-
+    dfs1(S,G,[S],R),
+    reverse(R,Path).
+
+dfs1(G,G,Path,Path).
+dfs1(X,G,Visited,Path) :-
+    edge(X,Y),
+    \+ member(Y,Visited),
+    dfs1(Y,G,[Y|Visited],Path).
+
+main :-
+    write('Enter start node (end with .) : '), read(S),
+    write('Enter goal node (end with .)  : '), read(G),
+    dfs(S,G,Path),
+    write('DFS Path = '), write(Path), nl.
+
+:- initialization(main).
