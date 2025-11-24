@@ -1,0 +1,10 @@
+max(A,B,M):- A>B, M=A.
+max(A,B,M):- B>=A, M=B.
+
+main :-
+    write('Enter first number: '), read(X),
+    write('Enter second number: '), read(Y),
+    max(X,Y,Ans),
+    write('Maximum = '), write(Ans), nl.
+
+:- initialization(main).
