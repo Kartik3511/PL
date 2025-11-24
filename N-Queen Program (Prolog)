@@ -1,0 +1,22 @@
+main :-
+    write('Enter N: '), read(N),
+    queens(N, Q), write(Q), nl.
+
+queens(N, Q) :-
+    numlist(1, N, L),
+    perm(L, Q),
+    safe(Q).
+
+safe([]).
+safe([X|T]) :-
+    safe(T),
+    no_attack(X, T, 1).
+
+no_attack(_, [], _).
+no_attack(X, [Y|T], D) :-
+    X =\= Y + D,
+    X =\= Y - D,
+    D1 is D + 1,
+    no_attack(X, T, D1).
+
+:- initialization(main).
