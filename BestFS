@@ -1,0 +1,37 @@
+edge(a,b).  edge(a,c).
+edge(b,d).  edge(c,d).
+edge(d,e).
+
+h(a,4). h(b,3). h(c,2). h(d,1). h(e,0).   % heuristic values
+
+bestfs(S,G,Path) :-
+    bestfs1([[S]], G, P),
+    reverse(P, Path).
+
+bestfs1([[G|Rest]|_], G, [G|Rest]).
+bestfs1(Paths, G, Sol) :-
+    select_best(Paths, Cur, Others),
+    Cur = [N|_],
+    findall([Next|Cur],
+            (edge(N,Next), \+ member(Next,Cur)),
+            NewPaths),
+    append(Others, NewPaths, NewFrontier),
+    bestfs1(NewFrontier, G, Sol).
+
+select_best([P], P, []).
+select_best([P1,P2|Rest], Best, Others) :-
+    P1 = [N1|_], P2 = [N2|_],
+    h(N1,H1), h(N2,H2),
+    ( H1 =< H2 ->
+        select_best([P1|Rest], Best, O1), Others = [P2|O1]
+    ;
+        select_best([P2|Rest], Best, O1), Others = [P1|O1]
+    ).
+
+main :-
+    write('Enter start node: '), read(S),
+    write('Enter goal node: '),  read(G),
+    bestfs(S,G,Path),
+    write('Best First Path = '), write(Path), nl.
+
+:- initialization(main).
