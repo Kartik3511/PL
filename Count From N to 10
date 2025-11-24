@@ -1,0 +1,8 @@
+count(N):- N=<10, write(N), nl, N1 is N+1, count(N1).
+count(N):- N>10.
+
+main :-
+    write('Enter starting number: '), read(N),
+    count(N).
+
+:- initialization(main).
